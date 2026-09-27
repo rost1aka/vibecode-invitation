@@ -28,7 +28,7 @@
 - **Бекенд:** одна Vercel serverless function `api/notify.ts`.
 - **Хостинг:** Vercel (Hobby). Фронтенд і `/api` на одному домені — без CORS.
 - **Тести:** Vitest.
-- **Репозиторій:** публічний, `github.com/rostyaka/vibecode-invitation`.
+- **Репозиторій:** публічний, `github.com/rost1aka/vibecode-invitation`.
 
 ## 3. URL-параметри
 
