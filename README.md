@@ -1,0 +1,59 @@
+# vibecode-invitation 🤖☕
+
+Персональне запрошення повайбкодити разом. Надсилаєш другу посилання з його імʼям — він погоджується (кнопка «Ні» тікає, тож вибору немає), обирає зручний час і додає подію в Google Calendar. Ти отримуєш інвайт у календар і повідомлення в Telegram.
+
+> not a big deal, зробив цей додаток поки пив каву
+
+> **Статус:** проєктування. Специфікація — [`docs/superpowers/specs/2026-09-28-vibecode-invitation-design.md`](docs/superpowers/specs/2026-09-28-vibecode-invitation-design.md).
+
+## Як скласти посилання
+
+```
+https://<домен>/?name=Андрій&location=Lviv%20IT%20Park&slots=2026-10-01T18:00%2B03:00,2026-10-02T19:30%2B03:00&duration=120
+```
+
+| Параметр | Опис | За замовчуванням |
+|---|---|---|
+| `name` | Імʼя друга (до 40 символів) | «Друже» |
+| `location` | Місце зустрічі, стає посиланням на Google Maps | не показується |
+| `slots` | Часові вікна через кому, ISO 8601 з offset (`+` кодуй як `%2B`) | крок вибору часу пропускається |
+| `duration` | Тривалість сесії у хвилинах (15–480) | 120 |
+
+Минулі й невалідні слоти автоматично відкидаються.
+
+## Стек
+
+- Vite + TypeScript (vanilla)
+- Vercel: статика + serverless function `api/notify.ts` для Telegram
+- Vitest
+
+## Налаштування
+
+### Env-змінні
+
+| Змінна | Опис |
+|---|---|
+| `VITE_HOST_EMAIL` | Твій email — додається гостем у подію календаря |
+| `TELEGRAM_BOT_TOKEN` | Токен бота від [@BotFather](https://t.me/BotFather) |
+| `TELEGRAM_CHAT_ID` | Твій chat id (напиши боту, потім відкрий `https://api.telegram.org/bot<TOKEN>/getUpdates`) |
+
+Локально — у `.env.local` (не комітиться), на Vercel — у Project Settings → Environment Variables.
+
+### Розробка
+
+```bash
+npm install
+npm run dev      # лише фронтенд
+vercel dev       # фронтенд + /api/notify
+npm test
+```
+
+### Деплой
+
+Імпортуй репозиторій у Vercel — Vite визначиться автоматично, `api/notify.ts` стане serverless-функцією. Додай env-змінні й задеплой.
+
+## Що приходить у Telegram
+
+- ✅ {імʼя} погодився вайбкодити! (спроб натиснути «Ні»: N)
+- 🕐 {імʼя} обрав час: …
+- 📅 {імʼя} натиснув «Додати в Google Calendar»
