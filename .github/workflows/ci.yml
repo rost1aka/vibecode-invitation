@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Unit tests
+        run: npm test -- --reporter=default --reporter=junit --outputFile.junit=reports/junit.xml
+
+      - name: Report to Proba
+        if: ${{ !cancelled() }} # also when the tests failed
+        env:
+          PROBA_URL: https://r-voitovych.proba-app.com
+          PROBA_PRODUCT: vibecode-invitation
+          PROBA_TOKEN: ${{ secrets.PROBA_TOKEN }}
+          PROBA_ROOT_DIR: ${{ github.workspace }}
+          PROBA_BUILD_ID: ${{ github.run_id }}
+          PROBA_BRANCH: ${{ github.head_ref || github.ref_name }}
+          PROBA_COMMIT: ${{ github.sha }}
+          PROBA_JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -fsSL "$PROBA_URL/api/ci/reporter.mjs" -o proba-report.mjs || exit 0
+          node proba-report.mjs reports/junit.xml unit
+
+      - name: Typecheck and build
+        run: npm run build
