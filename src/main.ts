@@ -87,6 +87,7 @@ function dodge(pointer: Point = buttonCentre()): void {
     { width: rect.width, height: rect.height },
     pointer,
     Math.random,
+    [byId('yes-btn').getBoundingClientRect()], // never cover «Так» — a tap on it must reach it
   );
   noBtn.style.left = `${pos.x}px`;
   noBtn.style.top = `${pos.y}px`;

@@ -48,6 +48,24 @@ describe('nextPosition', () => {
     expect(pos).toEqual({ x: 16, y: 16 });
   });
 
+  // VI-TC-50
+  it('never lands on a rect it must avoid, such as the Yes button', () => {
+    const viewport = { width: 375, height: 667 };
+    const button = { width: 80, height: 44 };
+    const yes = { left: 100, top: 300, width: 90, height: 44 };
+    const random = seeded(7);
+    for (let i = 0; i < 1000; i++) {
+      const pointer = { x: random() * viewport.width, y: random() * viewport.height };
+      const pos = nextPosition(viewport, button, pointer, random, [yes]);
+      const overlaps =
+        pos.x < yes.left + yes.width &&
+        pos.x + button.width > yes.left &&
+        pos.y < yes.top + yes.height &&
+        pos.y + button.height > yes.top;
+      expect(overlaps).toBe(false);
+    }
+  });
+
   // VI-TC-21
   it('returns finite non-negative coordinates when the button does not fit', () => {
     const pos = nextPosition({ width: 50, height: 30 }, { width: 100, height: 40 }, { x: 25, y: 15 }, seeded(1));
