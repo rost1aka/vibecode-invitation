@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatSlot, formatStart } from '../src/format';
+import { formatSlot, formatStart, slotParts } from '../src/format';
 
 describe('formatSlot', () => {
   // VI-TC-12
@@ -10,6 +10,15 @@ describe('formatSlot', () => {
   // VI-TC-13
   it('shows the time in the friend time zone', () => {
     expect(formatSlot('2026-10-01T18:00+03:00', 90, 'Europe/London')).toBe('чт, 1 жовтня · 16:00–17:30');
+  });
+});
+
+describe('slotParts', () => {
+  it('splits a slot into day and time range for the confirmation screen', () => {
+    expect(slotParts('2026-10-02T19:30+03:00', 120, 'Europe/Kyiv')).toEqual({
+      day: 'пт, 2 жовтня',
+      time: '19:30–21:30',
+    });
   });
 });
 

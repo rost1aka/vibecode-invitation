@@ -32,6 +32,10 @@ https://<домен>/?name=Андрій&location=Lviv%20IT%20Park&slots=2026-10-
 
 Минулі й невалідні слоти автоматично відкидаються.
 
+## Дизайн
+
+Хакерсько-піксельний термінал: фосфорно-зелений на чорному, Press Start 2P + JetBrains Mono, сканлайни. Макет — [artifact](https://claude.ai/artifact/Gv6V2WXDXPuhx7npvZKDj1), деталі — у специфікації (§5, «Візуальний стиль»).
+
 ## Стек
 
 - Vite + TypeScript (vanilla)

@@ -1,7 +1,7 @@
 import './style.css';
 import { buildCalendarUrl, buildMapsUrl } from './calendar';
 import { isNear, nextPosition, type Point } from './dodge';
-import { formatSlot } from './format';
+import { formatSlot, slotParts } from './format';
 import { notify } from './notify';
 import { parseParams } from './params';
 import { toVocative } from './vocative';
@@ -26,24 +26,33 @@ let selectedSlot: string | null = null;
 let noAttempts = 0;
 let accepted = false;
 
+/** Terminal bar: the «command» that produced each screen and its exit status. */
+const BAR: Record<Screen, [command: string, status: string]> = {
+  invite: ['~/vibecode $ ./invite', '[ONLINE]'],
+  slots: ['~/vibecode $ ./invite --accept', '[OK]'],
+  done: ['~/vibecode $ ./schedule', '[EXIT 0]'],
+};
+
 function show(screen: Screen): void {
+  const changed = screen !== currentScreen;
   currentScreen = screen;
   for (const name of ['invite', 'slots', 'done'] as const) {
     byId(`screen-${name}`).hidden = name !== screen;
   }
   footer.hidden = screen !== 'invite';
+  [byId('bar-cmd').textContent, byId('bar-status').textContent] = BAR[screen];
+  if (changed) byId(`screen-${screen}`).querySelector<HTMLElement>('.title')?.focus();
 }
 
 // Screen 1 — invitation. The title waits for the vocative so it never flips «Андрій» → «Андрію».
 toVocative(params.name, params.gender, params.vocative).then((greeting) => {
-  byId('invite-title').textContent = `${greeting}, давай повайбкодимо разом? 🤖☕`;
+  byId('invite-title').textContent = `${greeting}, давай повайбкодимо разом?`;
   app.classList.add('is-ready');
 });
 
 if (params.location) {
-  const link = byId<HTMLAnchorElement>('invite-location-link');
-  link.textContent = `📍 ${params.location}`;
-  link.href = buildMapsUrl(params.location);
+  byId('invite-location-text').textContent = params.location;
+  byId<HTMLAnchorElement>('invite-location-link').href = buildMapsUrl(params.location);
   byId('invite-location').hidden = false;
 }
 
@@ -132,26 +141,43 @@ function renderSlots(): void {
   if (params.slots.length === 0) {
     byId('slots-title').textContent = 'Супер, я знав, що ти погодишся! Напиши мені, коли тобі зручно';
     byId('slots-subtitle').hidden = true;
+    byId('slots-tz').hidden = true;
     return;
   }
-  for (const slot of params.slots) {
+  params.slots.forEach((slot, index) => {
     const card = document.createElement('button');
     card.type = 'button';
     card.className = 'slot-card';
-    card.textContent = formatSlot(slot, params.duration, friendTimeZone);
+    const idx = document.createElement('span');
+    idx.className = 'slot-idx';
+    idx.textContent = String(index + 1).padStart(2, '0');
+    const label = document.createElement('span');
+    label.className = 'slot-label';
+    label.textContent = formatSlot(slot, params.duration, friendTimeZone);
+    const arrow = document.createElement('span');
+    arrow.className = 'slot-arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '>';
+    card.append(idx, label, arrow);
     card.addEventListener('click', () => selectSlot(slot));
     list.append(card);
-  }
+  });
+  byId('slots-tz').textContent = `Час показано у твоєму поясі · ${friendTimeZone}`;
 }
 
 // Screen 3 — confirmation.
 function selectSlot(slot: string): void {
   selectedSlot = slot;
   notify({ type: 'slot_selected', name: friendName, slot, timeZone: friendTimeZone });
-  byId('done-when').textContent = formatSlot(slot, params.duration, friendTimeZone);
-  const location = byId('done-location');
-  location.textContent = params.location ? `📍 ${params.location}` : '';
-  location.hidden = !params.location;
+  const { day, time } = slotParts(slot, params.duration, friendTimeZone);
+  byId('done-day').textContent = day;
+  byId('done-time').textContent = time;
+  byId('done-location-label').hidden = byId('done-location').hidden = !params.location;
+  if (params.location) {
+    const link = byId<HTMLAnchorElement>('done-location-link');
+    link.textContent = params.location;
+    link.href = buildMapsUrl(params.location);
+  }
   calendarBtn.href = buildCalendarUrl(slot, params.duration, params.location, hostEmail);
   show('done');
 }
