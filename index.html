@@ -3,36 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050806" />
     <title>Повайбкодимо? 🤖☕</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Press+Start+2P&display=swap"
+    />
   </head>
   <body>
-    <main id="app" class="app">
-      <section id="screen-invite" class="screen">
-        <h1 id="invite-title" class="title"></h1>
-        <p id="invite-location" class="location" hidden>
-          <a id="invite-location-link" target="_blank" rel="noopener"></a>
-        </p>
-        <div class="actions">
-          <button id="yes-btn" class="btn btn-primary" type="button">Так</button>
-          <button id="no-btn" class="btn btn-secondary" type="button">Ні</button>
-        </div>
-      </section>
+    <div class="term">
+      <header class="bar">
+        <span id="bar-cmd">~/vibecode $ ./invite</span>
+        <span id="bar-status" class="bar-status">[ONLINE]</span>
+      </header>
 
-      <section id="screen-slots" class="screen" hidden>
-        <h1 id="slots-title" class="title">Супер, я знав, що ти погодишся! 😎</h1>
-        <p id="slots-subtitle" class="subtitle">Обери зручний час:</p>
-        <div id="slots-list" class="slots"></div>
-      </section>
+      <main id="app" class="app">
+        <section id="screen-invite" class="screen">
+          <div class="art" aria-hidden="true">
+            <svg class="px-robot" viewBox="0 0 16 16" shape-rendering="crispEdges" fill="currentColor">
+              <rect x="7" y="0" width="2" height="1" /><rect x="7.5" y="1" width="1" height="2" />
+              <rect x="2" y="3" width="12" height="1" /><rect x="2" y="12" width="12" height="1" />
+              <rect x="2" y="3" width="1" height="10" /><rect x="13" y="3" width="1" height="10" />
+              <rect x="5" y="6" width="2" height="2" /><rect x="9" y="6" width="2" height="2" />
+              <rect x="5" y="10" width="6" height="1" />
+              <rect x="0" y="7" width="2" height="2" /><rect x="14" y="7" width="2" height="2" />
+              <rect x="4" y="13" width="2" height="2" /><rect x="10" y="13" width="2" height="2" />
+            </svg>
+            <svg class="px-coffee" viewBox="0 0 16 16" shape-rendering="crispEdges" fill="currentColor">
+              <g class="steam">
+                <rect x="4" y="1" width="1" height="1" /><rect x="5" y="2" width="1" height="1" /><rect x="4" y="3" width="1" height="1" />
+                <rect x="8" y="1" width="1" height="1" /><rect x="9" y="2" width="1" height="1" /><rect x="8" y="3" width="1" height="1" />
+              </g>
+              <rect x="2" y="6" width="10" height="1" /><rect x="2" y="6" width="1" height="7" />
+              <rect x="11" y="6" width="1" height="7" /><rect x="3" y="13" width="8" height="1" />
+              <rect x="3" y="8" width="8" height="5" opacity="0.45" />
+              <rect x="12" y="7" width="2" height="1" /><rect x="14" y="8" width="1" height="3" />
+              <rect x="12" y="11" width="2" height="1" /><rect x="1" y="14" width="12" height="1" />
+            </svg>
+          </div>
+          <p class="dim">&gt; incoming_invite.txt</p>
+          <h1 id="invite-title" class="title" tabindex="-1"></h1>
+          <p id="invite-location" class="location" hidden>
+            <a id="invite-location-link" target="_blank" rel="noopener">
+              <svg class="px-pin" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true">
+                <rect x="2" y="0" width="4" height="1" /><rect x="1" y="1" width="6" height="1" />
+                <rect x="1" y="2" width="2" height="1" /><rect x="5" y="2" width="2" height="1" />
+                <rect x="1" y="3" width="6" height="1" /><rect x="2" y="4" width="4" height="1" />
+                <rect x="3" y="5" width="2" height="2" />
+              </svg>
+              <span id="invite-location-text"></span>
+            </a>
+          </p>
+          <div class="actions">
+            <button id="yes-btn" class="btn btn-primary" type="button">Так</button>
+            <button id="no-btn" class="btn btn-secondary" type="button">Ні</button>
+          </div>
+        </section>
 
-      <section id="screen-done" class="screen" hidden>
-        <h1 class="title">Вайбкодинг-сесію заплановано! 🎉</h1>
-        <p id="done-when" class="subtitle"></p>
-        <p id="done-location" class="location" hidden></p>
-        <a id="calendar-btn" class="btn btn-primary" target="_blank" rel="noopener">Додати в Google Calendar</a>
-        <button id="change-slot" class="link-btn" type="button">обрати інший час</button>
-      </section>
-    </main>
-    <footer id="coffee-footer" class="footer">not a big deal, зробив цей додаток поки пив каву</footer>
+        <section id="screen-slots" class="screen" hidden>
+          <div class="log dim">
+            <p>&gt; handshake ........ <span class="ok">done</span></p>
+            <p>&gt; friend.accepted .. <span class="ok">true</span></p>
+          </div>
+          <h1 id="slots-title" class="title title-sm" tabindex="-1">Супер, я знав, що ти погодишся!</h1>
+          <p id="slots-subtitle" class="prompt">$ select --slot <span class="dim">// Обери зручний час:</span></p>
+          <div id="slots-list" class="slots"></div>
+          <p id="slots-tz" class="note dim"></p>
+        </section>
+
+        <section id="screen-done" class="screen" hidden>
+          <div class="log">
+            <p class="dim">&gt; compiling session...</p>
+            <p class="ok progress" aria-hidden="true">[<span class="progress-fill">████████████████</span>] 100%</p>
+          </div>
+          <h1 class="title title-sm" tabindex="-1">Вайбкодинг-сесію заплановано!</h1>
+          <dl class="details">
+            <dt>DATE</dt><dd id="done-day"></dd>
+            <dt>TIME</dt><dd id="done-time"></dd>
+            <dt id="done-location-label" hidden>LOC</dt>
+            <dd id="done-location" hidden><a id="done-location-link" target="_blank" rel="noopener"></a></dd>
+          </dl>
+          <a id="calendar-btn" class="btn btn-primary btn-wide" target="_blank" rel="noopener">
+            <svg class="px-cal" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true">
+              <rect x="0" y="1" width="8" height="1" /><rect x="0" y="2" width="1" height="6" /><rect x="7" y="2" width="1" height="6" />
+              <rect x="0" y="7" width="8" height="1" /><rect x="2" y="0" width="1" height="2" /><rect x="5" y="0" width="1" height="2" />
+              <rect x="0" y="3" width="8" height="1" /><rect x="3" y="4" width="1" height="3" /><rect x="2" y="5" width="3" height="1" />
+            </svg>
+            <span>Додати в Google Calendar</span>
+          </a>
+          <button id="change-slot" class="link-btn" type="button">&lt; обрати інший час</button>
+          <p class="note dim">// інвайт прийде автору, щойно збережеш подію</p>
+        </section>
+      </main>
+
+      <footer id="coffee-footer" class="footer">
+        // not a big deal, зробив цей додаток поки пив каву <span class="cursor" aria-hidden="true"></span>
+      </footer>
+    </div>
+    <div class="crt" aria-hidden="true"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
