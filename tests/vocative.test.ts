@@ -11,16 +11,14 @@ function fakeLib(overrides: Partial<ShevchenkoLib> = {}): ShevchenkoLib {
 }
 
 describe('toVocative', () => {
-  // VI-TC-23
-  it('declines common names with the real library', async () => {
+  it('VI-TC-23: declines common names with the real library', async () => {
     expect(await toVocative('Андрій')).toBe('Андрію');
     expect(await toVocative('Олена')).toBe('Олено');
     expect(await toVocative('Тарас')).toBe('Тарасе');
     expect(await toVocative('Микола')).toBe('Миколо');
   });
 
-  // VI-TC-24
-  it('prefers the override and greets «Друже» without a name', async () => {
+  it('VI-TC-24: prefers the override and greets «Друже» without a name', async () => {
     const lib = fakeLib();
     expect(await toVocative('Андрій', 'm', 'Андрійку', async () => lib)).toBe('Андрійку');
     expect(lib.inVocative).not.toHaveBeenCalled();
@@ -28,8 +26,7 @@ describe('toVocative', () => {
     expect(await toVocative('   ')).toBe('Друже');
   });
 
-  // VI-TC-25
-  it('returns the name unchanged for Latin names, unknown gender or library errors', async () => {
+  it('VI-TC-25: returns the name unchanged for Latin names, unknown gender or library errors', async () => {
     const lib = fakeLib();
     expect(await toVocative('Alex', null, null, async () => lib)).toBe('Alex');
     expect(lib.detectGender).not.toHaveBeenCalled();
@@ -42,8 +39,7 @@ describe('toVocative', () => {
     expect(await toVocative('Андрій', null, null, async () => throwing)).toBe('Андрій');
   });
 
-  // VI-TC-26
-  it('passes an explicit gender to the library without detecting it', async () => {
+  it('VI-TC-26: passes an explicit gender to the library without detecting it', async () => {
     const lib = fakeLib();
     expect(await toVocative('Саша', 'f', null, async () => lib)).toBe('Саша!');
     expect(lib.detectGender).not.toHaveBeenCalled();

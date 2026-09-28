@@ -2,8 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buildCalendarUrl, buildMapsUrl } from '../src/calendar';
 
 describe('buildCalendarUrl', () => {
-  // VI-TC-15
-  it('builds a TEMPLATE link with UTC dates, end = start + duration', () => {
+  it('VI-TC-15: builds a TEMPLATE link with UTC dates, end = start + duration', () => {
     const url = new URL(buildCalendarUrl('2026-10-01T18:00+03:00', 90, null, null));
     expect(`${url.origin}${url.pathname}`).toBe('https://calendar.google.com/calendar/render');
     expect(url.searchParams.get('action')).toBe('TEMPLATE');
@@ -12,8 +11,7 @@ describe('buildCalendarUrl', () => {
     expect(url.searchParams.get('details')).toBe('Вайбкодимо разом 🤖☕');
   });
 
-  // VI-TC-16
-  it('adds location and guest only when present, encoded', () => {
+  it('VI-TC-16: adds location and guest only when present, encoded', () => {
     const bare = new URL(buildCalendarUrl('2026-10-01T18:00+03:00', 120, null, null));
     expect(bare.searchParams.has('location')).toBe(false);
     expect(bare.searchParams.has('add')).toBe(false);
@@ -28,8 +26,7 @@ describe('buildCalendarUrl', () => {
 });
 
 describe('buildMapsUrl', () => {
-  // VI-TC-17
-  it('builds a Google Maps search link', () => {
+  it('VI-TC-17: builds a Google Maps search link', () => {
     expect(buildMapsUrl('Lviv IT Park')).toBe('https://www.google.com/maps/search/?api=1&query=Lviv%20IT%20Park');
   });
 });

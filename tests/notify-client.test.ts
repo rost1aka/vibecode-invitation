@@ -2,8 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { notify } from '../src/notify';
 
 describe('notify', () => {
-  // VI-TC-30
-  it('posts the event as JSON with keepalive', () => {
+  it('VI-TC-30: posts the event as JSON with keepalive', () => {
     const fetchFn = vi.fn(async () => new Response(null, { status: 204 }));
     notify({ type: 'accepted', name: 'Андрій', noAttempts: 3 }, fetchFn);
     expect(fetchFn).toHaveBeenCalledWith('/api/notify', {
@@ -14,8 +13,7 @@ describe('notify', () => {
     });
   });
 
-  // VI-TC-31
-  it('swallows synchronous throws and rejected promises', async () => {
+  it('VI-TC-31: swallows synchronous throws and rejected promises', async () => {
     const event = { type: 'calendar_clicked', name: 'Андрій', slot: '2026-10-01T18:00+03:00' } as const;
     expect(() =>
       notify(event, () => {
