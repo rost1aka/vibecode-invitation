@@ -19,8 +19,7 @@ const sequence = (...values: number[]) => {
 };
 
 describe('nextPosition', () => {
-  // VI-TC-18
-  it('always keeps the button inside the viewport with a 16px margin', () => {
+  it('VI-TC-18: always keeps the button inside the viewport with a 16px margin', () => {
     const viewport = { width: 375, height: 667 };
     const button = { width: 80, height: 44 };
     const random = seeded(42);
@@ -34,22 +33,19 @@ describe('nextPosition', () => {
     }
   });
 
-  // VI-TC-19
-  it('returns the first candidate whose centre is at least 200px from the pointer', () => {
+  it('VI-TC-19: returns the first candidate whose centre is at least 200px from the pointer', () => {
     // candidate 1 = (16,16), centre (66,36) — right under the pointer; candidate 2 = (450,380)
     const pos = nextPosition({ width: 1000, height: 800 }, { width: 100, height: 40 }, { x: 66, y: 36 }, sequence(0, 0, 0.5, 0.5));
     expect(pos).toEqual({ x: 450, y: 380 });
   });
 
-  // VI-TC-20
-  it('falls back to the farthest candidate on a small screen', () => {
+  it('VI-TC-20: falls back to the farthest candidate on a small screen', () => {
     // No point of a 240x240 viewport is 200px from its centre; (16,16) is the farthest of the two candidates.
     const pos = nextPosition({ width: 240, height: 240 }, { width: 100, height: 40 }, { x: 120, y: 120 }, sequence(0.5, 0.5, 0, 0));
     expect(pos).toEqual({ x: 16, y: 16 });
   });
 
-  // VI-TC-50
-  it('never lands on a rect it must avoid, such as the Yes button', () => {
+  it('VI-TC-50: never lands on a rect it must avoid, such as the Yes button', () => {
     const viewport = { width: 375, height: 667 };
     const button = { width: 80, height: 44 };
     const yes = { left: 100, top: 300, width: 90, height: 44 };
@@ -66,8 +62,7 @@ describe('nextPosition', () => {
     }
   });
 
-  // VI-TC-21
-  it('returns finite non-negative coordinates when the button does not fit', () => {
+  it('VI-TC-21: returns finite non-negative coordinates when the button does not fit', () => {
     const pos = nextPosition({ width: 50, height: 30 }, { width: 100, height: 40 }, { x: 25, y: 15 }, seeded(1));
     expect(Number.isFinite(pos.x) && Number.isFinite(pos.y)).toBe(true);
     expect(pos.x).toBeGreaterThanOrEqual(0);
@@ -76,8 +71,7 @@ describe('nextPosition', () => {
 });
 
 describe('isNear', () => {
-  // VI-TC-22
-  it('is true strictly within 100px of the button centre', () => {
+  it('VI-TC-22: is true strictly within 100px of the button centre', () => {
     const rect = { left: 100, top: 100, width: 80, height: 40 }; // centre (140,120)
     expect(isNear({ x: 239, y: 120 }, rect)).toBe(true);
     expect(isNear({ x: 240, y: 120 }, rect)).toBe(false);

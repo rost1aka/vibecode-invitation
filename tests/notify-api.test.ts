@@ -10,8 +10,7 @@ const post = (body: string) => new Request('https://x.test/api/notify', { method
 const okFetch = () => vi.fn(async () => new Response('{"ok":true}', { status: 200 }));
 
 describe('validateEvent', () => {
-  // VI-TC-32
-  it('accepts the three event types and clips strings to 100', () => {
+  it('VI-TC-32: accepts the three event types and clips strings to 100', () => {
     expect(validateEvent(accepted)).toEqual(accepted);
     expect(validateEvent({ type: 'slot_selected', name: 'Андрій', slot: SLOT, timeZone: 'Europe/Warsaw' })).toEqual({
       type: 'slot_selected',
@@ -28,8 +27,7 @@ describe('validateEvent', () => {
     expect(long && long.name).toBe('я'.repeat(100));
   });
 
-  // VI-TC-33
-  it('rejects unknown types, bad noAttempts, bad slots and non-objects', () => {
+  it('VI-TC-33: rejects unknown types, bad noAttempts, bad slots and non-objects', () => {
     for (const body of [
       null,
       'accepted',
@@ -52,8 +50,7 @@ describe('validateEvent', () => {
 });
 
 describe('formatMessage', () => {
-  // VI-TC-34
-  it('renders the texts from the spec with Kyiv time and the nominative name', () => {
+  it('VI-TC-34: renders the texts from the spec with Kyiv time and the nominative name', () => {
     expect(formatMessage({ type: 'accepted', name: 'Андрій', noAttempts: 7 })).toBe(
       '✅ Андрій погодився вайбкодити! (спроб натиснути «Ні»: 7)',
     );
@@ -67,14 +64,12 @@ describe('formatMessage', () => {
 });
 
 describe('handleNotify', () => {
-  // VI-TC-35
-  it('answers 405 to anything but POST', async () => {
+  it('VI-TC-35: answers 405 to anything but POST', async () => {
     const res = await handleNotify(new Request('https://x.test/api/notify'), ENV, okFetch());
     expect(res.status).toBe(405);
   });
 
-  // VI-TC-36
-  it('answers 413 when the body exceeds 2048 bytes', async () => {
+  it('VI-TC-36: answers 413 when the body exceeds 2048 bytes', async () => {
     const fetchFn = okFetch();
     expect((await handleNotify(post('x'.repeat(2049)), ENV, fetchFn)).status).toBe(413);
     // 1025 Cyrillic letters = 2050 bytes, only 1025 characters
@@ -83,22 +78,19 @@ describe('handleNotify', () => {
     expect(fetchFn).not.toHaveBeenCalled();
   });
 
-  // VI-TC-37
-  it('answers 400 to invalid JSON or an invalid event', async () => {
+  it('VI-TC-37: answers 400 to invalid JSON or an invalid event', async () => {
     expect((await handleNotify(post('{not json'), ENV, okFetch())).status).toBe(400);
     expect((await handleNotify(post(JSON.stringify({ type: 'nope' })), ENV, okFetch())).status).toBe(400);
   });
 
-  // VI-TC-38
-  it('answers 500 without Telegram env and does not call Telegram', async () => {
+  it('VI-TC-38: answers 500 without Telegram env and does not call Telegram', async () => {
     const fetchFn = okFetch();
     expect((await handleNotify(post(JSON.stringify(accepted)), {}, fetchFn)).status).toBe(500);
     expect((await handleNotify(post(JSON.stringify(accepted)), { TELEGRAM_BOT_TOKEN: 'T' }, fetchFn)).status).toBe(500);
     expect(fetchFn).not.toHaveBeenCalled();
   });
 
-  // VI-TC-39
-  it('sends a plain-text message to the configured chat and answers 204', async () => {
+  it('VI-TC-39: sends a plain-text message to the configured chat and answers 204', async () => {
     const fetchFn = okFetch();
     const res = await handleNotify(post(JSON.stringify(accepted)), ENV, fetchFn);
     expect(res.status).toBe(204);
@@ -111,8 +103,7 @@ describe('handleNotify', () => {
     expect(payload).not.toHaveProperty('parse_mode');
   });
 
-  // VI-TC-40
-  it('answers 502 when Telegram fails or is unreachable', async () => {
+  it('VI-TC-40: answers 502 when Telegram fails or is unreachable', async () => {
     const failing = vi.fn(async () => new Response('{"ok":false}', { status: 400 }));
     expect((await handleNotify(post(JSON.stringify(accepted)), ENV, failing)).status).toBe(502);
     const throwing = vi.fn(async () => Promise.reject(new TypeError('fetch failed')));

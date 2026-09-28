@@ -17,8 +17,7 @@ const base: InvitationParams = {
 const roundTrip = (p: InvitationParams) => parseParams(new URL(buildInvitationUrl(ORIGIN, p)).search, NOW);
 
 describe('buildInvitationUrl', () => {
-  // VI-TC-27
-  it('round-trips through parseParams', () => {
+  it('VI-TC-27: round-trips through parseParams', () => {
     const fixtures: InvitationParams[] = [
       base,
       { ...base, name: 'Андрій' },
@@ -35,15 +34,13 @@ describe('buildInvitationUrl', () => {
     for (const fixture of fixtures) expect(roundTrip(fixture)).toEqual(fixture);
   });
 
-  // VI-TC-28
-  it('omits default values', () => {
+  it('VI-TC-28: omits default values', () => {
     expect(buildInvitationUrl(ORIGIN, base)).toBe(`${ORIGIN}/`);
     expect(buildInvitationUrl(ORIGIN, { ...base, name: 'Andrii' })).toBe(`${ORIGIN}/?name=Andrii`);
     expect(buildInvitationUrl(ORIGIN, { ...base, duration: 60 })).toBe(`${ORIGIN}/?duration=60`);
   });
 
-  // VI-TC-29
-  it('encodes plus signs, Cyrillic and query metacharacters safely', () => {
+  it('VI-TC-29: encodes plus signs, Cyrillic and query metacharacters safely', () => {
     const p: InvitationParams = {
       ...base,
       name: 'Андрій & Co #1?',
@@ -67,15 +64,13 @@ describe('formToParams', () => {
     slots: [''],
   };
 
-  // VI-TC-41
-  it('keeps vocative only when it differs from the automatic one', () => {
+  it('VI-TC-41: keeps vocative only when it differs from the automatic one', () => {
     expect(formToParams(form, 'Андрію', NOW).params.vocative).toBeNull();
     expect(formToParams({ ...form, vocative: 'Андрійку' }, 'Андрію', NOW).params.vocative).toBe('Андрійку');
     expect(formToParams({ ...form, vocative: '  ' }, 'Андрію', NOW).params.vocative).toBeNull();
   });
 
-  // VI-TC-42
-  it('maps gender, converts, sorts and dedupes slots, flags past rows, caps at 12', () => {
+  it('VI-TC-42: maps gender, converts, sorts and dedupes slots, flags past rows, caps at 12', () => {
     const result = formToParams(
       {
         ...form,
