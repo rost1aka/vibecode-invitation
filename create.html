@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Створити запрошення 🤖☕</title>
+  </head>
+  <body>
+    <main class="builder">
+      <h1 class="title">Створити запрошення 🤖☕</h1>
+      <form id="form" novalidate>
+        <div class="builder">
+          <label>
+            Імʼя друга (як у паспорті)
+            <input id="name" maxlength="40" required placeholder="Андрій" autocomplete="off" />
+          </label>
+
+          <label>
+            Звертання
+            <span class="row">
+              <input id="vocative" maxlength="40" autocomplete="off" />
+              <button id="vocative-reset" class="small-btn" type="button" title="Повернути автоматичне" hidden>↺</button>
+            </span>
+          </label>
+
+          <fieldset>
+            <legend>Стать</legend>
+            <div class="radios">
+              <label><input type="radio" name="gender" value="" checked /> авто</label>
+              <label><input type="radio" name="gender" value="m" /> ч</label>
+              <label><input type="radio" name="gender" value="f" /> ж</label>
+            </div>
+          </fieldset>
+
+          <label>
+            Локація
+            <input id="location" maxlength="100" placeholder="Lviv IT Park" autocomplete="off" />
+          </label>
+
+          <label>
+            Тривалість
+            <select id="duration">
+              <option value="30">30 хв</option>
+              <option value="60">60 хв</option>
+              <option value="90">90 хв</option>
+              <option value="120" selected>120 хв</option>
+              <option value="180">180 хв</option>
+              <option value="240">240 хв</option>
+            </select>
+          </label>
+
+          <fieldset>
+            <legend>Таймслоти</legend>
+            <div id="slots" class="builder" style="padding: 0; gap: 8px"></div>
+            <button id="add-slot" class="small-btn" type="button">+ додати слот</button>
+            <p id="tz-hint" class="hint"></p>
+            <p id="no-slots-warning" class="hint" hidden>Без слотів друг просто напише тобі, коли зручно</p>
+          </fieldset>
+        </div>
+      </form>
+
+      <section class="result">
+        <p id="preview" class="preview"></p>
+        <input id="link" readonly aria-label="Посилання-запрошення" />
+        <div class="row">
+          <button id="copy" class="small-btn" type="button">Скопіювати</button>
+          <button id="open" class="small-btn" type="button">Переглянути</button>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/src/create.ts"></script>
+  </body>
+</html>
