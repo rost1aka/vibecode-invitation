@@ -50,6 +50,12 @@ https://<домен>/?name=Андрій&location=Lviv%20IT%20Park&slots=2026-10-
 
 Локально — у `.env.local` (не комітиться), на Vercel — у Project Settings → Environment Variables.
 
+### CI і Proba
+
+`.github/workflows/ci.yml` на кожен push у `main` і на кожен PR запускає тести, відправляє JUnit-звіт у [Proba](https://r-voitovych.proba-app.com/vibecode-invitation) (сьют `unit`) і перевіряє збірку. Деплой робить Vercel сам із `main`.
+
+Потрібен секрет GitHub Actions `PROBA_TOKEN` (Repository → Settings → Secrets and variables → Actions) — CI-токен Proba з роллю editor. У Vercel він не потрібен.
+
 ### Розробка
 
 ```bash
