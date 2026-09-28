@@ -4,7 +4,7 @@
 
 > not a big deal, зробив цей додаток поки пив каву
 
-> **Статус:** проєктування. Специфікація — [`docs/superpowers/specs/2026-09-28-vibecode-invitation-design.md`](docs/superpowers/specs/2026-09-28-vibecode-invitation-design.md).
+> Специфікація — [`docs/superpowers/specs/2026-09-28-vibecode-invitation-design.md`](docs/superpowers/specs/2026-09-28-vibecode-invitation-design.md), план — [`docs/superpowers/plans/2026-09-28-vibecode-invitation.md`](docs/superpowers/plans/2026-09-28-vibecode-invitation.md).
 
 ## Як створити запрошення
 
@@ -56,7 +56,8 @@ https://<домен>/?name=Андрій&location=Lviv%20IT%20Park&slots=2026-10-
 npm install
 npm run dev      # лише фронтенд
 vercel dev       # фронтенд + /api/notify
-npm test
+npm test         # Vitest, TZ=Europe/Kyiv
+npm run build    # typecheck + vite build
 ```
 
 ### Деплой
