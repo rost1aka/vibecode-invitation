@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Повайбкодимо? 🤖☕</title>
+  </head>
+  <body>
+    <main id="app" class="app">
+      <section id="screen-invite" class="screen">
+        <h1 id="invite-title" class="title"></h1>
+        <p id="invite-location" class="location" hidden>
+          <a id="invite-location-link" target="_blank" rel="noopener"></a>
+        </p>
+        <div class="actions">
+          <button id="yes-btn" class="btn btn-primary" type="button">Так</button>
+          <button id="no-btn" class="btn btn-secondary" type="button">Ні</button>
+        </div>
+      </section>
+
+      <section id="screen-slots" class="screen" hidden>
+        <h1 id="slots-title" class="title">Супер, я знав, що ти погодишся! 😎</h1>
+        <p id="slots-subtitle" class="subtitle">Обери зручний час:</p>
+        <div id="slots-list" class="slots"></div>
+      </section>
+
+      <section id="screen-done" class="screen" hidden>
+        <h1 class="title">Вайбкодинг-сесію заплановано! 🎉</h1>
+        <p id="done-when" class="subtitle"></p>
+        <p id="done-location" class="location" hidden></p>
+        <a id="calendar-btn" class="btn btn-primary" target="_blank" rel="noopener">Додати в Google Calendar</a>
+        <button id="change-slot" class="link-btn" type="button">обрати інший час</button>
+      </section>
+    </main>
+    <footer id="coffee-footer" class="footer">not a big deal, зробив цей додаток поки пив каву</footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
